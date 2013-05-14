@@ -166,20 +166,20 @@ class AccessPoint < ActiveRecord::Base
     with_properties.where(:property_sets => {:public => true})
   end
 
-  def self.up
-    with_properties.where(:property_sets => {:reachable => true})
+  def self.up(f='%%')
+    with_properties.where("reachable = true and favourite like ?",  f)
   end
 
-  def self.down
-    with_properties.where(:property_sets => {:reachable => false})
+  def self.down(f='%%')
+    with_properties.where("reachable = false and favourite like ?", f)
   end
 
-  def self.known
-    with_properties.where(:property_sets => {:reachable => [true, false]})
+  def self.known(f='%%')
+    with_properties.where("( reachable = false OR reachable = true) and favourite like ?", f)
   end
 
-  def self.unknown
-    with_properties.where(:property_sets => {:reachable => nil})
+  def self.unknown(f='%%')
+    with_properties.where("reachable is NULL and favourite like ?",  f)
   end
   
   def self.favourite
